@@ -25,7 +25,7 @@ export async function render(host, context) {
   try {
     const report = await get('/api/doctor');
     clear(host);
-    host.append(tally(report), ...findings(report));
+    host.append(tally(report), ...findings(report), ...optionalFindings(report));
     if (report.ok) context.markDone('done');
   } catch (error) {
     clear(host);
@@ -79,4 +79,29 @@ function problem(heading, items, describe) {
     el('b', { text: heading }),
     el('ul', {}, items.map((item) => el('li', { text: describe(item) }))),
   ]);
+}
+
+/**
+ * The launcher's live checks for optional services (onboarding/probes.js).
+ * Kept apart from Rumi's own findings: a rejected optional key turns off one
+ * feature, it does not make Rumi unready, so it never changes "Ready".
+ * Only services with every key set are checked, so an empty list says nothing.
+ */
+function optionalFindings(report) {
+  const results = report.optionalResults || [];
+  if (!results.length) return [];
+  const failing = results.filter((row) => row.status === 'fail');
+  const passing = results.filter((row) => row.status === 'pass');
+  const notices = [];
+  if (failing.length) {
+    notices.push(problem('Some optional services did not accept their key. Those features will not work until it is fixed.',
+      failing, (row) => `${row.keys.join(' + ')}: ${row.detail}`));
+  }
+  if (passing.length) {
+    notices.push(el('div', { class: 'notice notice--ok' }, [
+      el('b', { text: 'Optional services that accepted their key:' }),
+      el('ul', {}, passing.map((row) => el('li', { text: `${row.keys.join(' + ')}: ${row.detail}` }))),
+    ]));
+  }
+  return notices;
 }

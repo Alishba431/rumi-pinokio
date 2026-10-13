@@ -17,9 +17,8 @@
 const fs = require('fs');
 const path = require('path');
 
-// The launcher lives at the root of the Rumi checkout rather than beside a clone
-// of it, so "the app" is simply the parent of this directory.
-const APP_ROOT = path.resolve(__dirname, '..');
+// install.js clones Rumi into `app/` beside the launcher scripts.
+const APP_ROOT = path.resolve(__dirname, '..', 'app');
 const ENV_PATH = path.join(APP_ROOT, '.env');
 const ENV_TEMPLATE_PATH = path.join(APP_ROOT, '.env.template');
 

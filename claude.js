@@ -16,8 +16,8 @@ module.exports = {
         // Interactive: Claude Code is a TTY program. Without this it would stop
         // at its first prompt and wait forever with no keyboard attached.
         input: true,
-        // Runs from the repository root, so the session sees the launcher and
-        // Rumi together -- which is the whole point of them sharing a repo.
+        // Runs from the launcher root, so the session sees the launcher and,
+        // under app/, Rumi.
         message: "claude"
       }
     }

@@ -1,480 +1,350 @@
-<p align="center">
-  <img src=".github/rumi-logo.png" alt="Rumi" width="120" />
-</p>
+# Rumi for Pinokio
 
-<h1 align="center">Rumi</h1>
+A [Pinokio](https://pinokio.co) launcher for [Rumi](https://hellorumi.ai), an open-source AI teaching
+companion that lives in WhatsApp. Teachers message it from the app already on their phone — no login, no
+install — and get lesson plans, classroom coaching, reading assessments, quizzes and voice replies in 15
+languages.
 
-<p align="center">
-  <strong>The open-source AI teaching assistant that lives on WhatsApp</strong><br>
-  You're not teaching alone.
-</p>
-
-<p align="center">
-  <a href="#quick-start">Quick Start</a> &middot;
-  <a href="#what-rumi-does">Features</a> &middot;
-  <a href="#-languages">Languages</a> &middot;
-  <a href="#-the-taleemabad-content-library">Content Library</a> &middot;
-  <a href="#-built-to-be-run-by-an-ai-agent">Agent-Native</a> &middot;
-  <a href="#documentation">Docs</a> &middot;
-  <a href="https://hellorumi.ai">Website</a>
-</p>
-
-> **This fork runs Rumi in [Pinokio](https://pinokio.co).** It adds a one-click launcher and a browser setup
-> wizard — credentials with live connection tests, the database schema, and the WhatsApp QR as an image
-> instead of terminal art. Install it in Pinokio from this repository's URL, or read
-> **[PINOKIO.md](PINOKIO.md)** first. Everything below is upstream Rumi and still applies.
-
-<p align="center">
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache%202.0-blue.svg" alt="License" /></a>
-  <a href="https://github.com/Orenda-Project/rumi-platform/actions/workflows/ci.yml"><img src="https://github.com/Orenda-Project/rumi-platform/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
-  <img src="https://img.shields.io/badge/node-%3E%3D20-brightgreen.svg" alt="Node.js" />
-  <img src="https://img.shields.io/badge/platform-WhatsApp-25D366.svg" alt="WhatsApp" />
-  <img src="https://img.shields.io/badge/setup-15%20minutes-25D366.svg" alt="15 minute setup" />
-  <img src="https://img.shields.io/badge/setup-AI--agent--native-7C3AED.svg" alt="Agent-native" />
-</p>
-
-<p align="center">
-  <img src="docs/images/features/hero.jpg" alt="A teacher and students using Rumi on WhatsApp" width="100%" />
-</p>
+This repository holds **only the launcher**: the sidebar scripts and a **GUI setup wizard** that replaces
+Rumi's terminal setup — credentials with live connection tests, the database schema, and the WhatsApp QR as
+a real image in your browser. Rumi itself is cloned from
+<https://github.com/Orenda-Project/rumi-platform> (Apache-2.0) into `app/` by **Install**, and updated from
+there by **Update**.
 
 ---
 
-**Rumi gives every teacher a coach in their pocket.** It runs entirely on WhatsApp — the app teachers already
-have — and offers classroom coaching on real lessons, reading assessments from a voice note, lesson plans,
-curriculum quizzes, and professional development, in the teacher's own language, 24 hours a day.
+## What the app does
 
-It is built to be **cloned and run by anyone**. Bring your own API keys, point it at a WhatsApp number, and
-you have a teaching assistant for your schools — no commissioning, no vendor, no lock-in.
+| | |
+|---|---|
+| **Lesson plans** | A full plan with objectives, activities and materials, in about ninety seconds |
+| **Classroom coaching** | A teacher records their class; Rumi returns a framework-scored report and a reflective conversation |
+| **Reading assessment** | Words per minute, accuracy and pronunciation from a child's voice recording |
+| **Quizzes and video quizzes** | Curriculum-aligned questions a teacher can send to a class |
+| **Voice, in 15 languages** | Including Urdu, Punjabi, Sindhi, Pashto, Hindi, Bengali, Tamil and more |
+| **Class tools** | Attendance, exam-sheet OCR, and a morning programme-health brief |
 
-<table>
-<tr><td><b>Meets teachers where they are</b></td><td>No app to install, no login to remember, no training day. If a teacher can send a WhatsApp message, they can use Rumi.</td></tr>
-<tr><td><b>Coaches right after the lesson</b></td><td>A teacher records their class and gets a framework-scored report plus a reflective conversation — while the lesson is still fresh, not at an annual workshop.</td></tr>
-<tr><td><b>Hears children read</b></td><td>A student reads aloud into a voice note; Rumi returns words-per-minute, accuracy, pronunciation and comprehension against grade benchmarks.</td></tr>
-<tr><td><b>Ships with real content</b></td><td>890 curriculum videos, 10,929 QA-certified questions, 15,557 voice clips and 3,217 illustrations — free, CDN-hosted, one command to import.</td></tr>
-<tr><td><b>Speaks their language</b></td><td>15 languages for chat, voice-note transcription and spoken replies — including a full Indian-language suite and Pakistan's regional languages.</td></tr>
-<tr><td><b>Try it without Meta</b></td><td>Link your own WhatsApp with a QR code and start chatting in about fifteen minutes. No Business account, no app review, no waiting.</td></tr>
-<tr><td><b>Set up by talking to it</b></td><td>The repo is agent-native: open it in Claude Code, Cursor or Codex and say "set me up". Or run one guided wizard that asks in plain language and checks every answer for you.</td></tr>
-<tr><td><b>Your keys, your data</b></td><td>Your Supabase, your WhatsApp number, your model provider. Nothing routes through us. Apache-2.0.</td></tr>
-</table>
+## Using the launcher
+
+1. **Install** — clones Rumi into `app/`, installs its dependencies and the wizard's, creates `app/.env`
+   from Rumi's template, and installs a local Redis.
+2. **Set up Rumi** — opens the onboarding wizard in your browser and walks five steps:
+   welcome → credentials → database → WhatsApp → done.
+3. **Start** — runs the bot. Opening Rumi in Pinokio after setup starts it automatically, and shows a
+   start screen rather than the bot's terminal: it says "Starting Rumi…" until the bot answers, then an
+   **Open Console** button takes you to the console. The terminal is still one click away under
+   **Terminal** in the sidebar.
+
+The sidebar opens on **Set up Rumi** until `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` and
+`OPENROUTER_API_KEY` are all set in `app/.env`, and on **Start** after that.
+
+`Doctor`, `Re-pair WhatsApp`, `Update` and `Reset` are there when you need them. `Terminal setup` runs
+Rumi's own `rumi setup` wizard, and is the fallback if any part of the GUI is unavailable.
+**Claude Code** opens a coding session in this folder — see [Working on the launcher](#working-on-the-launcher).
+
+### What you will need
+
+- **A Supabase project** — <https://supabase.com>, free tier is plenty
+- **An OpenRouter key** — <https://openrouter.ai/keys>
+- **A second phone** — Rumi answers *as* the number you link, so it cannot reply to that same number
+
+### Optional keys are tested too
+
+Rumi itself only checks that most optional keys are *present*. The wizard also tests them live, with one
+free, read-only request each, when you save the key and again on the last step: Soniox, ElevenLabs,
+Uplift, Azure Speech (key and region), Gamma, Mistral, Kie.ai (it shows your remaining credits) and Axiom
+(token and dataset). Slack, Discord and Matrix are tested by Rumi's own check. A pass means the service
+accepted the key; it cannot tell whether your plan includes the feature or has credit left.
+
+### Two steps that stay manual
+
+Neither of these is a gap in the launcher; both are properties of the services involved.
+
+1. **One SQL paste.** Supabase offers no API for running arbitrary SQL, so the small `exec_sql` helper that
+   the schema is applied through has to be pasted into the SQL editor once. The wizard shows the exact SQL,
+   copies it to your clipboard, links straight to your project's editor, and then polls until it appears.
+2. **Scanning the QR.** Linking WhatsApp means scanning a code from another phone.
+
+### Notes and limits
+
+- **Where things live.** Your credentials are in `app/.env`, and the linked WhatsApp session in
+  `app/.channel-state/`. Both are inside Rumi's clone and never in this repository.
+- **The bot listens on all interfaces.** Rumi calls `app.listen(PORT)` with no host and exposes no setting
+  for it, and this launcher does not patch the app, so the bot's port is reachable from your network. The
+  operator console on that port still refuses any non-loopback client.
+- **Use the plain `http://127.0.0.1:…` links.** The console checks the `Host` header, so Pinokio's
+  `https://<port>.localhost` proxy form and LAN addresses are rejected with `403 Host not allowed`.
+- **Redis follows `REDIS_URL` in `app/.env`.** Rumi needs a Redis; the launcher can run one on this machine
+  (installed through conda), or you can use a hosted one (Upstash, Railway) by pasting its URL into the
+  wizard. A local Redis is only ever started when `REDIS_URL` points at this machine — the template's
+  `redis://localhost:6379` does:
+  - **Start** starts it before the bot, for as long as the bot runs.
+  - **Set up Rumi** does *not* start one when it opens, because at that point nobody has chosen yet. It
+    starts one the first time a check needs it (saving the Redis address, or the closing check), and only if
+    `REDIS_URL` is still local then. So someone who pastes an Upstash URL never runs a local Redis at all.
+  - **Doctor** starts one just for its check.
+
+  With a local Redis and none of these running, nothing is listening, so a check made from anywhere else
+  reports `nothing answered at redis://localhost:6379`. conda-forge has no Windows build, so on Windows
+  `REDIS_URL` has to be a hosted address.
+- **The bot keeps its port.** Each Start reuses the port it had last time (remembered in `.ports.json`),
+  so a console tab opened earlier works again once Rumi is back up. The wizard has a port of its own.
+  Pressing **Start** stops the wizard if it is running — setup is over by then.
+- **Update** pulls this launcher, then pulls Rumi in `app/` from Orenda-Project/rumi-platform, then
+  reinstalls dependencies.
+- **Reset** deletes `app/` — Rumi, its dependencies, `app/.env` and the WhatsApp session — so the next
+  **Install** starts from a fresh clone. Copy `app/.env` somewhere first if you want to keep your keys.
 
 ---
 
-## Quick Start
+## Working on the launcher
+
+**Install** once, then press **Claude Code** in the sidebar. It opens a Claude Code session at the launcher
+root, installing Claude Code into Pinokio's own npm prefix first if you don't have it. The session sees the
+launcher and, under `app/`, Rumi.
+
+Agents should start at [CLAUDE.md](CLAUDE.md); the launcher's own guide is
+[.claude/skills/pinokio-launcher](.claude/skills/pinokio-launcher/SKILL.md), and the wizard's layout is in
+[onboarding/CLAUDE.md](onboarding/CLAUDE.md). Rumi's own agent guide is `app/CLAUDE.md`.
+
+### The shape of it
+
+| Path | What it is |
+|------|-----------|
+| `pinokio.js` | The sidebar. A pure function of state: what exists, what is running |
+| `install.js` `start.js` `onboard.js` | The scripts those menu items run |
+| `setup.js` `pair.js` `doctor.js` `claude.js` | Terminal sessions — `rumi setup`, `rumi pair`, `rumi doctor`, Claude Code |
+| `update.js` `reset.js` | `git pull` launcher + Rumi and reinstall; delete `app/` |
+| `onboarding/` | The GUI wizard: Express server, routes, and a no-build-step client |
+| `home.html` | The start screen shown while Start runs. Polls the bot's `/health`, then offers **Open Console** |
+| `scripts/wait-for-console.js` | Used by `start.js` to report the console URL once the bot answers `/health` |
+| `scripts/redis.js` | The Redis step `start.js` and `doctor.js` share |
+| `scripts/pick-port.js` | Keeps the bot and the wizard each on their own port between runs (`.ports.json`) |
+| `scripts/local-redis.js` | Starts a local Redis only when `REDIS_URL` in `app/.env` points at this machine |
+| `app/` | Rumi, cloned by Install. Git-ignored here; it is its own repository |
+
+### Running it without Pinokio
 
 ```bash
-# 1. Fork this repo on GitHub, then clone YOUR fork
-git clone https://github.com/YOUR-ORG/rumi-platform.git
-cd rumi-platform
-
-# 2. Install — tools, dependencies, and the `rumi` command
-./install.sh
-
-# 3. Connect Rumi to your accounts — guided, one question at a time
-rumi setup
-
-# 4. Start it
-rumi start
+git clone https://github.com/Orenda-Project/rumi-platform app   # what Install does first
+node onboarding/server.js --port=4180    # the wizard on its own
+node app/bin/rumi.js doctor              # what Rumi makes of app/.env
 ```
 
-Then message the number Rumi linked and send **`Hi`**.
+The client under `onboarding/public/` is plain ES modules — edit and reload. Server-side changes need a
+restart (stop and start **Set up Rumi**, or re-run the command above).
 
-**About fifteen minutes**, most of it waiting for a Supabase project to start. `rumi setup` asks in plain
-language rather than by variable name ("where should Rumi keep its memory", not `SUPABASE_URL`), checks every
-value against the real service as you type it, creates the whole database for you, and saves each answer as
-it goes — so Ctrl+C is safe and running it again picks up where you stopped.
-
-### Important: you need a second phone number to test from
-
-> ⚠️ By default Rumi links **your own** WhatsApp account, the same way WhatsApp Web does — so Rumi *is* your
-> number. You cannot have a useful conversation with yourself, so you need a **different** number to message
-> it from.
->
-> Any of these works: a spare SIM, an old phone, a work phone, a family member's phone, or a second WhatsApp
-> account logged into WhatsApp Web in your browser. Both numbers need WhatsApp installed and active.
->
-> If you skip this you will pair successfully, send a message, and see nothing happen — not because anything
-> is broken, but because Rumi is on the other end of your own chat.
-
-### What you need
-
-| | Where to get it | What it's for | Cost |
-|---|---|---|---|
-| **Node.js 20+** and **git** | [nodejs.org](https://nodejs.org) | Running Rumi | free |
-| **A Supabase project** | [supabase.com](https://supabase.com) | Where Rumi remembers teachers, lessons and assessments | free tier is plenty |
-| **An OpenRouter key** | [openrouter.ai/keys](https://openrouter.ai/keys) | How Rumi thinks — one key, 500+ models | a few dollars goes a long way |
-| **A Redis address** | [Upstash](https://upstash.com) · [Railway](https://railway.app) · or local Docker | Conversations in progress, and background jobs | free tier is plenty |
-| **WhatsApp on your phone** | — | The number Rumi answers as | free |
-| **A second number with WhatsApp** | a spare SIM, old phone, or colleague | The number you message Rumi *from* — see above | free |
-
-The wizard offers to start Redis locally with Docker if you have it, so that row is often one keypress.
-**A Meta WhatsApp Business account is not required** to try Rumi — see [the two ways to run
-it](#the-two-ways-to-run-rumi).
-
-Optional feature keys (Soniox, ElevenLabs, Uplift, Gamma, Kie.ai, Azure, Mistral) unlock the features that
-use them, and only those. `rumi setup` offers them at the end and skipping is a real answer — every one can be
-added later by setting its key. Each is documented in [`.env.template`](.env.template).
-
-### The `rumi` command
-
-| Command | What it does |
-|---|---|
-| `rumi setup` | Connect Rumi to your accounts. **Start here.** `--reconfigure` re-asks everything. |
-| `rumi start` | Start Rumi |
-| `rumi status` | Is Rumi running, which WhatsApp number it answers as, what's switched on |
-| `rumi doctor` | Check every connection in detail, with where to get anything missing |
-| `rumi console` | Open the web console — same answers in a browser, and you can change things there |
-| `rumi pair` | Link (or re-link) WhatsApp — sessions do expire |
-| `rumi graduate` | Move to an official WhatsApp Business number |
-
-If `install.sh` could not put `rumi` on your PATH, `node bin/rumi.js <command>` is identical.
-
-**Prefer a screen to a terminal?** `rumi start` opens it for you — or go to
-**<http://localhost:3000/console>** yourself. The
-console shows whether every service is answering, which features are on and which key each one is waiting
-for, the speech-to-text → AI → text-to-speech pipeline with the model behind each layer, and a live feed of
-what Rumi is doing right now. You can set any key there instead of editing `.env`, with the same "where do I
-get this" links the wizard gives you and a **Test connection** button on each one. It opens without a
-password on your own machine, and stays locked anywhere else until you set one. (`rumi start --no-open`
-if you would rather it did not.) Full details: **[docs/console.md](docs/console.md)**.
-
-**Would rather not type it yourself?** Open the repo in a coding agent (Claude Code, Cursor, Codex) and say
-*"set me up"* — it walks you through the same sequence in conversation, following the
-[`/setup`](.claude/skills/setup/SKILL.md) skill. Setting up a real deployment (hosting, the Meta webhook,
-WhatsApp Flows, background workers), or prefer the manual route? **[SETUP.md](SETUP.md)** has the full
-walkthrough, including getting a WhatsApp number from scratch.
-
----
-
-## The two ways to run Rumi
-
-Rumi's messaging channel is pluggable. You pick one during setup, in plain language, and you can change your
-mind later.
-
-|  | **Just trying it out** | **Real deployment** |
-|---|---|---|
-| **What it is** | Rumi becomes a linked device on your own WhatsApp, exactly like WhatsApp Web | An official WhatsApp Business number through Meta's Cloud API |
-| **To get started** | Scan a QR code. ~2 minutes. | A Meta Business account, a verified number, and their app-review process |
-| **Good for** | Evaluating, demos, development | Schools, districts, anything with real teachers on it |
-| **Limits** | One personal account; WhatsApp may disconnect it. Tap-through forms, approved templates and picture-menu carousels are Meta-only — Rumi asks the same questions as an ordinary chat instead, so nothing is blocked, but it looks plainer. | None — the full experience |
-
-**Moving across is one command:** `rumi graduate`. Teachers, conversations and past assessments all carry
-over on their own, because Rumi identifies people by phone number rather than by channel. The one thing that
-cannot follow you is the number itself, so tell your testers to start a chat with the new one.
-
-**Rumi also works on Slack and Discord now, in addition to WhatsApp — not instead of it.** If your team
-already lives on Slack or Discord, teachers can talk to Rumi right there, with the same features — coaching,
-reading assessment, quizzes, attendance, and more. To turn this on, add a Slack or Discord bot's login keys
-to your `.env` file (`SLACK_BOT_TOKEN` + `SLACK_SIGNING_SECRET` for Slack, `DISCORD_BOT_TOKEN` for Discord).
-A few WhatsApp-only touches (like tap-through forms) look a little different on Slack/Discord — Rumi just
-asks the same questions as a normal message instead — but nothing is missing. See
-[docs/onboarding/sandbox-production-design.md](docs/onboarding/sandbox-production-design.md) for how this
-works under the hood.
-
----
-
-## Why Rumi Exists
-
-Across the world, **millions of teachers work in isolation** — in rural schools, multigrade classrooms, and
-under-resourced systems where instructional coaches simply don't exist. Traditional professional development
-reaches teachers once or twice a year at best. The gap between what teachers need and what the system
-provides is enormous.
-
-Rumi fills that gap. By meeting teachers on WhatsApp — the world's most widely used messaging app — Rumi
-provides instant coaching on real lessons, reading-fluency assessment, curriculum-aligned content, and
-multilingual support, all on the phone already in their pocket. The core insight: **the best time to coach a
-teacher is right after they teach**, and the best tool is the one they already have.
-
-**Why open source?** Good teaching support shouldn't depend on which country or company you happen to work
-for. Any ministry, NGO, school network, or research team can stand up their own instance — adapt the
-frameworks to their curriculum, run it in their languages, keep their data in their own systems, and improve
-it for everyone.
-
----
-
-## What Rumi Does
-
-Every feature lives on WhatsApp. Click any feature for its own page — what it is, how it works, and the API
-key(s) that switch it on.
-
-| Feature | What it does | Switches on when you set |
-|---|---|---|
-| 💬 **[AI Chat](docs/features/ai-chat.md)** | Ask any teaching question by text or voice; get an expert, pedagogy-grounded answer | core (uses `OPENROUTER_API_KEY`); voice needs `SONIOX_API_KEY` |
-| 📝 **[Registration](docs/features/registration.md)** | Friendly WhatsApp onboarding for teachers | _always on (core)_ |
-| 🎯 **[Classroom Coaching](docs/features/coaching.md)** | A class recording → framework-scored report + reflective conversation | `SONIOX_API_KEY` |
-| 📖 **[Reading Assessment](docs/features/reading-assessment.md)** | A student reads aloud → fluency, accuracy, pronunciation, comprehension | `SONIOX_API_KEY` |
-| 📋 **[Lesson Plans](docs/features/lesson-plans.md)** | A topic + grade → a full lesson-plan PDF | `GAMMA_API_KEY` |
-| 📸 **[Pic-to-LP](docs/features/pic-to-lp.md)** | A photo of a textbook page → an illustrated 2-page lesson plan | `KIE_API_KEY` |
-| 📚 **[Homework](docs/features/homework.md)** | Pick a class + chapters → a curriculum homework bundle PDF | `HOMEWORK_FLOW_ID` |
-| 🧠 **[Quiz](docs/features/quiz.md)** | Teacher sends a topic quiz to a class; students answer on their parents' WhatsApp, teacher gets a results report | _core (uses `OPENROUTER_API_KEY`)_ |
-| 🎬🎓 **[Video Quizzes](docs/features/video-quizzes.md)** | A curriculum video → its quiz, 3 s later — pictures, voice notes, class share links, and a next-morning reteach report. Ships with the open **Taleemabad content library** ([see below ↓](#-the-taleemabad-content-library)) | one import script + `DEFAULT_REGION=pakistan` |
-| 🗣️ **[Voice Messages](docs/features/voice.md)** | Full spoken interaction in many languages | `SONIOX_API_KEY` + `ELEVENLABS_API_KEY` |
-| 🎬 **[Video Generation](docs/features/video.md)** | A topic → a short narrated educational video | `VIDEO_GENERATION_ENABLED` + `KIE_API_KEY` |
-| ✅ **[Attendance](docs/features/attendance.md)** | Mark attendance by voice or by tapping names — works the same way on WhatsApp, Slack, and Discord | _always on (core)_ |
-| 🧮 **[Exam Checker](docs/features/exam-checker.md)** | Photograph answer sheets → vision OCR + AI grading | `MISTRAL_API_KEY` |
-| 🌅 **[Morning Brief](docs/features/morning-brief.md)** | Every morning, one thread that tells your team how the programme is doing — registration, lesson plans, coaching, scores, reading, every school worst-first — on WhatsApp, Slack or Discord, with a live page | `BRIEF_RECIPIENTS` + a read-only `BRIEF_DATABASE_URL` |
-
-> **No tiers, no toggles to hunt for.** Rumi gates features by **presence**: set a feature's API key and it
-> switches on; leave it blank and it stays off cleanly — the bot never crashes over a missing key. Run
-> **`rumi status`** or **`rumi doctor`** anytime to see exactly which features are live and which key would
-> switch each remaining one on.
-
-**Go deeper:** browse the full **[feature library](docs/features/)** · understand how lesson plans get routed
-in **[LP_PATHS.md](docs/LP_PATHS.md)** · or look at a real **[sample coaching report
-(PDF)](docs/samples/coaching-report-sample.pdf)** rendered by the actual pipeline.
-
-Utility flows round it out — **settings** (language + coaching framework), **status** (your active sessions),
-**edit-class** (roster), and a **student-video** library.
-
-### 🌐 Languages
-
-**15 languages**, for **text chat, voice-note transcription (STT), and spoken replies (TTS)** alike.
-Alongside English, Urdu, Arabic and Spanish, Rumi covers Pakistan's regional languages — Punjabi, Sindhi,
-Pashto and Balochi (via Meta's MMS-ASR) — Sri Lankan Tamil, and a complete **Indian-language suite**:
-
-> **🇮🇳 हिन्दी Hindi · বাংলা Bengali · मराठी Marathi · తెలుగు Telugu · தமிழ் Tamil · ಕನ್ನಡ Kannada**
-
-Every one works end to end — teachers chat and send voice notes in their language, get spoken and written
-replies back, and generate **lesson plans localized to their classrooms** (₹ money problems, locally familiar
-names and contexts). Pick a language anytime with **`/language`**, or just message Rumi in your own script.
-Which languages appear is driven per-region by config (`region_features`), so a deployment shows only what it
-serves.
-
----
-
-## 📚 The Taleemabad Content Library
-
-<p align="center">
-  <img src="docs/images/features/video-quiz-library.png" alt="The Taleemabad content library — 890 videos, 10,929 certified questions, 15,557 voice clips, 3,217 illustrations" width="100%" />
-</p>
-
-<p align="center">
-  <a href="https://pub-0edccec5d5bd419782ba389c59faecac.r2.dev/media/Taleemabad_Library_On_Rumi.mp4">
-    <img src="docs/images/features/video-quiz-film-poster.png" alt="▶ Watch the film: Taleemabad Library on Rumi (68 s)" width="100%" />
-  </a><br>
-  <em>▶ 68 seconds: a phone on a charpai, one message, and 890 lessons — <a href="https://pub-0edccec5d5bd419782ba389c59faecac.r2.dev/media/Taleemabad_Library_On_Rumi.mp4">watch the film</a></em>
-</p>
-
-Rumi ships with a **real, complete content library — free and openly hosted**. Between 2015 and 2021,
-[Taleemabad](https://taleemabad.com)'s content team hand-wrote question banks, hand-drew the artwork, and
-studio-recorded voice clips for the Taleemabad Student App, used by hundreds of thousands of Pakistani
-children. That entire archive has been rescued, matched to its **890 curriculum videos** (Nursery–Grade 6,
-English + Urdu), QA-certified question by question, and rebuilt for WhatsApp:
-
-<p align="center">
-  <img src="docs/images/features/video-quiz-phones.png" alt="Video quizzes on WhatsApp: tap-the-picture Flow, Urdu phonics by voice note, score card" width="100%" />
-</p>
-
-- A teacher sends **`/video`**, browses grade → subject → topic, and the video lands in her chat. Three
-  seconds later she's offered its **quiz** — 15 questions with per-answer feedback, picture options she can
-  actually tap, and phonics questions asked by voice note.
-- She can forward **one link** to her class WhatsApp group; every child plays in their own 1:1 chat, and she
-  gets a **next-morning PDF** naming exactly what to reteach and why the class got it wrong.
-- **All media is served from a public CDN** — the videos, all 3,217 illustrations, and all 15,557 voice clips
-  — so your clone needs *zero* content hosting. One command imports the whole library:
+### Before you commit
 
 ```bash
-node bot/scripts/setup/import-video-quiz-library.js --apply
+node --check pinokio.js install.js start.js onboard.js onboarding/server.js    # and the rest
 ```
 
-The library is Pakistani national-curriculum content, so the quiz feature is **region-gated to `pakistan`**
-out of the box (`DEFAULT_REGION=pakistan` in `.env` switches it on — the seed data does the rest). If you
-serve another curriculum, the gate is one row of config, and the full pipeline for building your own corpus
-is documented in **[docs/features/video-quizzes.md](docs/features/video-quizzes.md)**.
+`node --check` parses `.js` as CommonJS, so for `onboarding/public/**` copy to `.mjs` first or it will
+reject the `import` lines.
 
----
-
-## 🤖 Built to be run by an AI agent
-
-Rumi is **agent-native**: the repository is structured so a coding agent (Claude Code, Cursor, Codex, …) can
-read it, set it up, debug it, and customize it with you. This is what makes "clone and run it yourself"
-realistic for a small, non-specialist team.
-
-- **Progressive-disclosure context.** A root [`CLAUDE.md`](CLAUDE.md) (and [`AGENTS.md`](AGENTS.md)) orients
-  the agent, then routes it down to folder guides ([`bot/CLAUDE.md`](bot/CLAUDE.md),
-  [`infrastructure/CLAUDE.md`](infrastructure/CLAUDE.md)) and, on demand, to **18 operational skills** under
-  [`.claude/skills/`](.claude/skills/) — coaching, reading-assessment, registration, lesson-plan routing,
-  whatsapp-flows, debugging, logging, database analysis, QA, the pre-merge checklist, the curriculum builder, the
-  morning brief, and more. The agent
-  loads only what the task needs.
-- **Just ask.** Open the repo in your agent and say *"set me up"* — it asks you for each credential in
-  conversation, checks every one against the real service, creates your database, and hands you the two steps
-  that need human hands (pasting one SQL helper, scanning the WhatsApp QR). It uses the same modules the
-  `rumi setup` wizard does, so the two paths can't drift. Or say *"swap the coaching framework to TEACH"* and
-  it follows the [customization guide](docs/agent-customization.md) to the exact files.
-- **Guard-railed for safety.** CI runs a secret scan (gitleaks) plus conformance guards that keep the schema,
-  the docs, and the agent skills honest — so an agent's changes can't silently break a clone or leak a
-  credential.
-
-Start at [`CLAUDE.md`](CLAUDE.md) → it points the way.
-
----
-
-## Architecture
-
-```
-rumi-platform/
-├── bin/rumi.js             # The `rumi` CLI — setup, start, status, doctor, pair, graduate
-├── install.sh              # One-time bootstrap: tools, dependencies, .env, the rumi command
-├── bot/                    # WhatsApp bot (Node.js + Express)
-│   ├── whatsapp-bot.js     # Entry point — webhook, inbound routing, message dispatch
-│   ├── shared/
-│   │   ├── config/         # Presence-based feature gating, branding, languages, regions
-│   │   ├── services/
-│   │   │   ├── messaging/  # Talks to WhatsApp, Slack, and Discord, and the plain-text fallback for simple setups
-│   │   │   ├── queue/      # Pluggable queue (sqs | bullmq)
-│   │   │   └── …           # LLM, coaching, reading, lesson plans, quiz, video, …
-│   │   ├── handlers/       # text / voice / image / flow / exam / attendance
-│   │   ├── routes/         # WhatsApp Flow endpoints (also drive the text fallbacks)
-│   │   └── utils/          # Structured logging, correlation IDs, html-to-pdf
-│   ├── workers/            # Async workers (coaching, video, lesson plans, quiz, exam, …)
-│   └── scripts/setup/      # The wizard, doctor, pairing, flow registration, encryption
-├── dashboard/              # Observability portal — analytics, health
-├── portal/                 # Teacher web portal (React)
-├── infrastructure/
-│   └── supabase/           # SQL schema (76 tables), RLS policies, seed data + bootstrap
-├── docs/                   # Architecture, features, customization, cost, samples
-└── .claude/                # Agent-native config — CLAUDE.md routers + 18 operational skills
-```
-
-### How a message flows
-
-```
-Teacher on WhatsApp, Slack, or Discord
-  → Meta Cloud API (webhook)  ·OR·  linked-device socket (sandbox)  ·OR·  Slack/Discord events
-    → one normalized inbound shape → message dispatch
-      → user lookup (Supabase) → language detection → feature routing
-        → text | voice | image | flow handler
-          → LLM (OpenRouter) → reply
-          → async job queue (Redis or SQS) → background workers → reports / media
-            → delivered back to the teacher on their own channel
-```
-
-Every channel converges on the same dispatch, so a feature is written once and works on all of them. A
-correlation id threads each request across the webhook, the queue, and the workers, so any flow can be
-traced end to end.
-See [docs/architecture.md](docs/architecture.md) for the full picture.
-
----
-
-## Customization
-
-Rumi is meant to be **adapted to your context** — your curriculum, your frameworks, your languages, your
-brand.
-
-**Quick (environment variables):**
-
-```env
-BOT_NAME=MyAssistant
-ORG_NAME=My School Network
-SUPPORT_CONTACT=help@example.org
-LLM_MODEL=anthropic/claude-sonnet-4
-```
-
-**Deep (agent-first):** this repo is designed to be customized by AI-assisted IDEs. The [Agent Customization
-Guide](docs/agent-customization.md) maps each goal to exact files:
-
-| I want to… | Guide |
-|---|---|
-| Swap the coaching framework (TEACH / Danielson / custom) | [Section 1](docs/agent-customization.md#1-swap-the-coaching-framework) |
-| Use ASER / EGRA instead of DIBELS for reading | [Section 2](docs/agent-customization.md#2-change-reading-assessment-methodology) |
-| Change the lesson-plan format (5E, UbD, …) | [Section 3](docs/agent-customization.md#3-modify-lesson-plan-templates) |
-| Add a language | [Section 4](docs/agent-customization.md#4-add-or-change-languages) |
-| Switch LLM provider/model | [Section 5](docs/agent-customization.md#5-switch-llm-provider-or-model) |
-| Rebrand the bot | [Section 11](docs/agent-customization.md#11-rebrand-the-bot) |
-
----
-
-## Technology Stack
-
-| Layer | Technology | Purpose |
-|---|---|---|
-| Runtime | Node.js 20+ | Server-side JavaScript |
-| Web | Express.js | Webhook + API routes |
-| Messaging | WhatsApp (official API or a linked-device QR code), plus Slack and Discord | Messages, media, interactive forms |
-| AI / LLM | OpenRouter (500+ models) | Chat, analysis, content |
-| Database | Supabase (PostgreSQL) | 76 tables with Row-Level Security |
-| Queue | Redis or AWS SQS (pluggable via `QUEUE_DRIVER`) | Transcription, reports, video, exams |
-| Speech-to-Text | Soniox, Whisper, Modal MMS-ASR | Multilingual transcription |
-| Text-to-Speech | ElevenLabs (+ Uplift for Urdu/regional) | Voice replies, reflective questions |
-| PDF | PDFKit / pdfmake / Playwright | Coaching & reading reports |
-| Images / Video | Kie.ai (Nano Banana Pro), FFmpeg | Educational visuals & video |
-| OCR | Mistral vision (+ Chandra, Surya) | Exam-sheet scanning |
-| Pronunciation | Azure Speech (optional) | Reading-assessment scoring |
-| Hosting | Railway / Docker / any Node host | Deployment |
-| Observability | Console + correlation IDs; Axiom optional | Structured logs + tracing |
-
----
-
-## Testing
+These three should hold after any change to the routes — the first one guards a bug that once returned the
+entire environment to anyone who asked:
 
 ```bash
-npm test               # the full suite
-npm run test:security  # secret scan — no hardcoded credentials
-npm run test:schema    # database schema validation
-npm run test:setup     # setup tooling
-rumi doctor            # live preflight: which services + features are configured
-npm run simulate       # CLI simulator — try features without WhatsApp
+curl -s -o /dev/null -w '%{http_code}\n' -X POST localhost:4180/api/probe/constructor -H 'X-Rumi-Onboarding: 1'   # 404
+curl -s -o /dev/null -w '%{http_code}\n' -X POST localhost:4180/api/env -d '{}'                                   # 403
+curl -s -o /dev/null -w '%{http_code}\n' -H 'Host: evil.example.com' localhost:4180/api/state                     # 403
 ```
 
-Every push and PR is gated by CI: an automated **secret scan** (gitleaks) plus conformance guards that verify
-the schema, the docs, the agent skills, and the link web all stay honest.
+---
+
+## API
+
+Rumi serves an HTTP API while `Start` is running. `PORT` is assigned by Pinokio — the exact URL is printed
+in the terminal and is what **Open Console** points at. The examples below use `3000`.
+
+### `GET /health`
+
+Liveness. Returns `200` once the bot is serving.
+
+```bash
+curl http://localhost:3000/health
+```
+
+```javascript
+const response = await fetch('http://localhost:3000/health');
+console.log(response.ok, await response.json());
+```
+
+```python
+import requests
+
+response = requests.get("http://localhost:3000/health", timeout=10)
+print(response.ok, response.json())
+```
+
+### `POST /webhook`
+
+The inbound message endpoint, in Meta WhatsApp Cloud API shape. This is what Meta calls in production, and
+what you post to directly to drive Rumi programmatically. `WHATSAPP_BOT_NUMBER` is whichever number Rumi
+answers as; `from` is the teacher you are simulating.
+
+```bash
+curl -X POST http://localhost:3000/webhook \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "object": "whatsapp_business_account",
+    "entry": [{
+      "changes": [{
+        "field": "messages",
+        "value": {
+          "messaging_product": "whatsapp",
+          "metadata": { "phone_number_id": "PHONE_NUMBER_ID" },
+          "messages": [{
+            "from": "923001234567",
+            "id": "wamid.test-1",
+            "type": "text",
+            "text": { "body": "Hi" }
+          }]
+        }
+      }]
+    }]
+  }'
+```
+
+```javascript
+const message = (from, body) => ({
+  object: 'whatsapp_business_account',
+  entry: [{
+    changes: [{
+      field: 'messages',
+      value: {
+        messaging_product: 'whatsapp',
+        metadata: { phone_number_id: process.env.PHONE_NUMBER_ID },
+        messages: [{ from, id: `wamid.${Date.now()}`, type: 'text', text: { body } }],
+      },
+    }],
+  }],
+});
+
+await fetch('http://localhost:3000/webhook', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify(message('923001234567', 'Hi')),
+});
+```
+
+```python
+import os
+import time
+import requests
+
+def message(sender: str, body: str) -> dict:
+    return {
+        "object": "whatsapp_business_account",
+        "entry": [{
+            "changes": [{
+                "field": "messages",
+                "value": {
+                    "messaging_product": "whatsapp",
+                    "metadata": {"phone_number_id": os.environ["PHONE_NUMBER_ID"]},
+                    "messages": [{
+                        "from": sender,
+                        "id": f"wamid.{int(time.time())}",
+                        "type": "text",
+                        "text": {"body": body},
+                    }],
+                },
+            }],
+        }],
+    }
+
+requests.post("http://localhost:3000/webhook", json=message("923001234567", "Hi"), timeout=30)
+```
+
+Rumi replies through the messaging channel, not in the HTTP response — the webhook answers `200` as soon as
+the message is accepted. Watch the reply in WhatsApp, or in the console's Activity feed.
+
+### `POST /console/api/env` — change a setting
+
+The console's own API, served under `/console` on both the bot and the onboarding server. It writes `.env`
+through the same validators the setup wizard uses.
+
+Three things are required, and they are the reason this is safe to expose on loopback:
+
+- `X-Console-Request: 1` — a header no cross-origin caller can set without a preflight that is never answered
+- `X-Console-Token` — a per-process token, published as `<meta name="console-token">` in the console's HTML
+- a loopback connection — any other peer is refused outright
+
+```bash
+PORT=3000
+TOKEN=$(curl -s "http://127.0.0.1:$PORT/console/" \
+  | grep -o 'name="console-token" content="[^"]*"' | cut -d'"' -f4)
+
+curl -X POST "http://127.0.0.1:$PORT/console/api/env" \
+  -H 'Content-Type: application/json' \
+  -H 'X-Console-Request: 1' \
+  -H "X-Console-Token: $TOKEN" \
+  -d '{"updates": {"LOG_LEVEL": "debug"}}'
+```
+
+```javascript
+const base = 'http://127.0.0.1:3000/console';
+
+const html = await (await fetch(`${base}/`)).text();
+const token = html.match(/name="console-token" content="([^"]*)"/)[1];
+
+const response = await fetch(`${base}/api/env`, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'X-Console-Request': '1',
+    'X-Console-Token': token,
+  },
+  body: JSON.stringify({ updates: { LOG_LEVEL: 'debug' } }),
+});
+
+console.log(await response.json()); // { saved: ['LOG_LEVEL'], pending: [...] }
+```
+
+```python
+import re
+import requests
+
+base = "http://127.0.0.1:3000/console"
+
+html = requests.get(f"{base}/", timeout=10).text
+token = re.search(r'name="console-token" content="([^"]*)"', html).group(1)
+
+response = requests.post(
+    f"{base}/api/env",
+    json={"updates": {"LOG_LEVEL": "debug"}},
+    headers={"X-Console-Request": "1", "X-Console-Token": token},
+    timeout=10,
+)
+print(response.json())  # {'saved': ['LOG_LEVEL'], 'pending': [...]}
+```
+
+`saved` lists what was written; `pending` lists variables whose saved value differs from the one the
+running process booted with. Most settings only take effect on restart; feature toggles apply immediately.
 
 ---
 
-## Documentation
+## How the GUI onboarding works
 
-| Doc | What it covers |
-|---|---|
-| [SETUP.md](SETUP.md) | Full setup — the two-command path, then the manual/production walkthrough |
-| [docs/features/](docs/features/) | Per-feature deep dives (what / how / enable) — one page each |
-| [docs/onboarding/sandbox-production-design.md](docs/onboarding/sandbox-production-design.md) | How the channel drivers work, and how `rumi graduate` moves between them |
-| [docs/onboarding/whatsapp.md](docs/onboarding/whatsapp.md) | Getting a WhatsApp Business number, start to finish |
-| [docs/onboarding/api-keys.md](docs/onboarding/api-keys.md) | Every API key: what it unlocks and where to get it |
-| [docs/LP_PATHS.md](docs/LP_PATHS.md) | How a lesson-plan request is routed (pre-generated vs Gamma vs photo) |
-| [docs/console.md](docs/console.md) | The operator web console — settings, health, the pipeline, live activity |
-| [docs/architecture.md](docs/architecture.md) | System architecture & message flow |
-| [CLAUDE.md](CLAUDE.md) + [.claude/](.claude/) | **Agent-native** context: the routers + the 18 operational skills |
-| [docs/agent-customization.md](docs/agent-customization.md) | Agent-first deep customization (frameworks, languages, branding) |
-| [docs/cost-guide.md](docs/cost-guide.md) | Monthly cost estimates — core baseline + per-feature add-ons |
-| [docs/monitoring.md](docs/monitoring.md) | Observability & debugging |
-| [docs/railway-operations.md](docs/railway-operations.md) | Running on Railway (scaling, logs, workers) |
-| [docs/pulling-updates.md](docs/pulling-updates.md) | Keeping your fork in sync with upstream |
-| [docs/samples/](docs/samples/) | Sample artifacts (e.g. a rendered coaching report) |
-| [SECURITY.md](SECURITY.md) | Security policy & responsible disclosure |
-| [.github/CONTRIBUTING.md](.github/CONTRIBUTING.md) | Development setup, code style, testing, PR guidelines |
+Rumi's console cannot be driven from another origin: it sends no CORS headers and sets
+`frame-ancestors 'none'`, both deliberately. So rather than talking to it across a port boundary, the
+onboarding server mounts it — `mountConsole(app, { bind: '127.0.0.1' })`, the same call the bot makes. One
+process, one port, one origin:
 
----
+```
+/           the five-step wizard
+/api/*      its endpoints, calling the console's runtime in-process
+/console/*  the real Rumi console, for everything after setup
+```
 
-## Troubleshooting
+Every `require` that reaches into Rumi's own modules lives in `onboarding/bridge.js`, and each one is
+checked at boot. If a module moves, only the step that needed it is disabled — the wizard says so on its
+first screen and points at the matching terminal script. The launcher reads Rumi's modules; it never
+rewrites them.
 
-| Symptom | What's happening |
-|---|---|
-| I paired successfully but Rumi never replies | You are almost certainly messaging from the same number Rumi is linked to. Use a [second number](#important-you-need-a-second-phone-number-to-test-from). |
-| `rumi doctor` says everything is "not configured" | Run it from the repo root, or make sure `.env` is there. `rumi status` will tell you what it can see. |
-| WhatsApp keeps syncing, or the session drops | Two processes must never share one WhatsApp session. Run `rumi status` to see what's holding it, stop that, then `rumi pair`. |
-| The bot won't start — "Missing REQUIRED env var(s)" | `rumi doctor` names each missing value and where to get it. |
-| A feature says it isn't available | It's presence-gated. `rumi status` lists which key switches it on. |
-
-More: [docs/monitoring.md](docs/monitoring.md) · or open the repo in your coding agent and paste the error.
-
----
-
-## Contributing
-
-Contributions are welcome. See [.github/CONTRIBUTING.md](.github/CONTRIBUTING.md) for development setup, code
-style, testing, and PR guidelines.
-
----
-
-## About
-
-Rumi is built by [Taleemabad](https://taleemabad.com) and shared with the world as open source. The name comes
-from Jalaluddin Rumi, the 13th-century poet and teacher who believed that education is not the filling of a
-vessel but the kindling of a flame.
-
-**Website**: [hellorumi.ai](https://hellorumi.ai) · **Research**: [hellorumi.ai/research](https://hellorumi.ai/research)
-
-## License
-
-Apache License 2.0 — see [LICENSE](LICENSE). You are free to use, modify, and distribute this software. We
-encourage contributing improvements back to the community.
+WhatsApp pairing runs in a forked child process (`onboarding/pair-worker.js`). The module behind it
+replaces global `console.*` at import time, takes a session lock, and memoises its socket so a second
+attempt would ignore a new QR callback — all fine in a CLI that exits, none of it welcome in a long-lived
+server. Killing the child is how "cancel" works, and why a retry behaves.

@@ -15,6 +15,8 @@
  */
 
 const { asyncRoute } = require('../async-route');
+const { ensureLocalRedis } = require('../local-redis');
+const optional = require('../probes');
 
 /**
  * @param {object} deps
@@ -34,7 +36,9 @@ function credentialsRoutes({ express, bridge, runtime }) {
   }
 
   router.get('/state', asyncRoute(async (req, res) => {
-    const payload = { capabilities, problems, catalog: null };
+    // probeFor: which launcher check tests each optional key, so the client can
+    // test one when it is saved. Rumi's own probes cover the required four.
+    const payload = { capabilities, problems, catalog: null, probeFor: optional.PROBE_FOR_KEY };
     if (capabilities.credentials) {
       payload.catalog = modules.catalog.buildCatalog(currentEnv());
     }
@@ -69,13 +73,23 @@ function credentialsRoutes({ express, bridge, runtime }) {
     // -- because Object(x) returns x -- hand the caller the entire environment,
     // service-role key and all.
     const { name } = req.params;
+
+    // The launcher's own live checks for optional services Rumi only checks
+    // for presence (see probes.js). runProbe does its own own-property lookup.
+    const launcherCheck = optional.runProbe(name, currentEnv());
+    if (launcherCheck) return res.json(await launcherCheck);
+
     const probes = modules.doctor.defaultProbes;
     if (!Object.prototype.hasOwnProperty.call(probes, name) || typeof probes[name] !== 'function') {
       return res.status(404).json({ ok: false, detail: `No such check: ${name}` });
     }
     const probe = probes[name];
+    const env = currentEnv();
+    // A local Redis starts here, when it is first tested, not when the wizard
+    // opens -- by now the operator has said which Redis they want.
+    if (name === 'redis') await ensureLocalRedis(env);
     try {
-      const result = await probe(currentEnv());
+      const result = await probe(env);
       return res.json(result);
     } catch (error) {
       // A probe that throws is a failed check, not a failed request -- the UI
@@ -88,8 +102,15 @@ function credentialsRoutes({ express, bridge, runtime }) {
     if (!capabilities.probes) {
       return res.status(503).json({ error: 'Diagnostics are unavailable.' });
     }
-    const report = await modules.doctor.runDoctor({ env: currentEnv() });
-    res.json(report);
+    const env = currentEnv();
+    await ensureLocalRedis(env);
+    // Optional services alongside Rumi's report, not inside it: a wrong
+    // optional key switches one feature off, it does not make Rumi unready.
+    const [report, optionalResults] = await Promise.all([
+      modules.doctor.runDoctor({ env }),
+      optional.runConfigured(env),
+    ]);
+    res.json({ ...report, optionalResults });
   }));
 
   return router;

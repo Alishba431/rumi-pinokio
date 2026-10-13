@@ -18,6 +18,7 @@ const path = require('path');
 
 const bridge = require('./bridge');
 const guards = require('./guards');
+const { ensureLocalRedis } = require('./local-redis');
 const { credentialsRoutes } = require('./routes/credentials');
 const { databaseRoutes } = require('./routes/database');
 const { whatsappRoutes } = require('./routes/whatsapp');
@@ -49,7 +50,7 @@ function attachConsole(app) {
       // standalone: this process is not the bot. Without it the console compares
       // the .env file against THIS server's environment and reports sixty
       // variables as "pending restart", which is noise and, worse, wrong.
-      const mounted = bridge.modules.console.mountConsole(app, { bind: HOST, standalone: true });
+      const mounted = bridge.modules.console.mountConsole(app, { envPath: bridge.ENV_PATH, bind: HOST, standalone: true });
       return { runtime: mounted.runtime, mode: mounted.mode };
     } catch (error) {
       bridge.problems.push(`The console could not be mounted: ${error.message}`);
@@ -79,6 +80,13 @@ function buildApp() {
   // unguarded.
   let consoleMounted = false;
   app.use(guards.securityHeaders({ hasConsole: () => consoleMounted }));
+
+  // The console's own "test this connection" for Redis needs a Redis to test.
+  // It only peeks: the console still answers the request, after its own
+  // guards. `runtime` is read at request time; it exists by then.
+  app.post('/console/api/probe/redis', (req, res, next) => {
+    ensureLocalRedis({ ...process.env, ...(runtime ? runtime.fileEnv() : {}) }).then(() => next(), next);
+  });
 
   // Before the body parser and the wizard's own routes, so the console keeps
   // full ownership of everything under its mount.

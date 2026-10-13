@@ -1,63 +1,10 @@
 {
-  "name": "rumi-platform",
-  "version": "2.2.0",
-  "description": "Rumi - AI Teaching Assistant for WhatsApp. Open-source platform for deploying AI-powered educational chatbots.",
+  "name": "rumi-pinokio",
+  "version": "1.0.0",
+  "description": "Pinokio launcher for Rumi (github.com/Orenda-Project/rumi-platform), with a GUI setup wizard.",
   "private": true,
-  "bin": {
-    "rumi": "./bin/rumi.js"
-  },
-  "scripts": {
-    "test": "node tests/run.js",
-    "test:security": "node tests/run.js --testPathPattern=sprint-0",
-    "test:sprint1": "node tests/run.js --testPathPattern=sprint-1",
-    "test:schema": "node tests/run.js --testPathPattern=sprint-2",
-    "test:setup": "node tests/run.js --testPathPattern=sprint-3",
-    "test:docs": "node tests/run.js --testPathPattern=sprint-4",
-    "test:e2e": "node tests/run.js --testPathPattern=integration",
-    "validate:env": "node bot/scripts/validate-env.js",
-    "validate:connections": "node infrastructure/scripts/test-connections.js",
-    "bootstrap:db": "node infrastructure/scripts/bootstrap-db.js",
-    "backfill:user-channels": "node infrastructure/scripts/backfill-user-channels.js",
-    "doctor": "node bot/scripts/setup/doctor.js",
-    "setup:flows": "node bot/scripts/setup/run-full-setup.js",
-    "discord:register-commands": "node bot/scripts/setup/discord-register-commands.js",
-    "setup:interactive": "node bot/scripts/setup/interactive-setup.js",
-    "pair:baileys": "node bot/scripts/setup/baileys-pair.js",
-    "graduate": "node bot/scripts/setup/graduate.js",
-    "simulate": "node bot/scripts/simulate.js",
-    "setup": "node bin/rumi.js setup",
-    "status": "node bin/rumi.js status",
-    "pair": "node bin/rumi.js pair",
-    "start": "node bin/rumi.js start"
-  },
-  "keywords": [
-    "whatsapp",
-    "chatbot",
-    "education",
-    "ai",
-    "teaching-assistant",
-    "edtech",
-    "openrouter"
-  ],
-  "author": "Orenda Project",
   "license": "Apache-2.0",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Orenda-Project/rumi-platform.git"
-  },
-  "engines": {
-    "node": ">=20.0.0"
-  },
-  "devDependencies": {
-    "@types/jest": "^29.5.12",
-    "jest": "^29.7.0",
-    "jest-environment-node": "^29.7.0"
-  },
   "dependencies": {
-    "discord.js": "^14.27.0",
-    "express": "^5.2.1",
-    "ioredis": "^5.9.2",
-    "openai": "^6.16.0",
     "qrcode": "^1.5.4"
   }
 }

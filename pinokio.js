@@ -7,8 +7,8 @@ const fs = require('fs')
  */
 const PLACEHOLDER = /^CHANGEME|your-project|your_|^YOUR_|^<.*>$/i
 
-/** The two values without which the bot aborts at boot. */
-const ESSENTIAL = ["SUPABASE_URL", "SUPABASE_SERVICE_ROLE_KEY"]
+/** The values without which the bot refuses to start (what `rumi doctor` calls required). */
+const ESSENTIAL = ["SUPABASE_URL", "SUPABASE_SERVICE_ROLE_KEY", "OPENROUTER_API_KEY"]
 
 const isSet = (value) => Boolean(value) && !PLACEHOLDER.test(value)
 
@@ -19,7 +19,7 @@ const isSet = (value) => Boolean(value) && !PLACEHOLDER.test(value)
  */
 const isConfigured = (info) => {
   try {
-    const env = fs.readFileSync(info.path(".env"), "utf8")
+    const env = fs.readFileSync(info.path("app/.env"), "utf8")
     const values = Object.fromEntries(
       env.split("\n")
         .map((line) => line.match(/^([^#=]+)=(.*)$/))
@@ -44,7 +44,11 @@ const BUSY_STATES = [
   ["reset", "Resetting", "reset.js"]
 ]
 
-/** While the wizard is up, its two pages are the whole sidebar. */
+/**
+ * While the wizard is up, its pages lead the sidebar, with Start beside them --
+ * the wizard's last step tells the operator to press it. start.js stops the
+ * wizard before it starts the bot.
+ */
 const onboardMenu = (info) => {
   const local = info.local("onboard.js")
   if (!(local && local.url)) {
@@ -53,19 +57,30 @@ const onboardMenu = (info) => {
   return [
     item("fa-solid fa-wand-magic-sparkles", "Set up Rumi", local.url, { default: true }),
     item("fa-solid fa-sliders", "Settings", local.console_url),
+    item("fa-solid fa-power-off", "Start", "start.js"),
     item("fa-solid fa-terminal", "Terminal", "onboard.js")
   ]
 }
 
-/** Once the bot is serving, the console is where someone actually wants to be. */
+/**
+ * While Start runs, the tab it opens on is the start screen, not the bot's
+ * terminal: home.html waits for the bot and then offers a button to the console.
+ * start.js saves its port before it starts the bot, which is what the page polls.
+ */
 const startMenu = (info) => {
   const local = info.local("start.js")
-  if (!(local && local.url)) {
-    return [item("fa-solid fa-terminal", "Terminal", "start.js", { default: true })]
+  const terminal = item("fa-solid fa-terminal", "Terminal", "start.js")
+  if (!(local && local.port)) {
+    return [{ ...terminal, default: true }]
+  }
+  const home = item("fa-solid fa-house", "Rumi", `home.html?raw=true&port=${local.port}`, { default: true })
+  if (!local.url) {
+    return [home, terminal]
   }
   return [
-    item("fa-solid fa-rocket", "Open Console", local.url, { default: true }),
-    item("fa-solid fa-terminal", "Terminal", "start.js")
+    home,
+    item("fa-solid fa-rocket", "Open Console", local.url),
+    terminal
   ]
 }
 
@@ -97,11 +112,15 @@ module.exports = {
     if (info.running("install.js")) {
       return [item("fa-solid fa-plug", "Installing", "install.js", { default: true })]
     }
-    if (!info.exists("bot/node_modules")) {
+    if (!info.exists("app/bot/node_modules")) {
       return [item("fa-solid fa-plug", "Install", "install.js", { default: true })]
     }
-    if (info.running("onboard.js")) return onboardMenu(info)
+    // Start first: while the bot runs, the sidebar's default -- which is also
+    // what Pinokio opens in Run mode -- must be the bot's start screen. Checked
+    // the other way round, a wizard Pinokio still listed as running once made
+    // the default its old address, which by then was the bot's bare root page.
     if (info.running("start.js")) return startMenu(info)
+    if (info.running("onboard.js")) return onboardMenu(info)
 
     const busy = BUSY_STATES.find(([, , script]) => info.running(script))
     if (busy) return [item("fa-solid fa-terminal", busy[1], busy[2], { default: true })]

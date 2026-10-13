@@ -1,107 +1,8 @@
-# Dependencies
+# Rumi, cloned by install.js -- its own repo, with your .env and WhatsApp session inside.
+/app/
+
+# The launcher's own dependencies (qrcode, for the setup wizard).
 node_modules/
-.pnp
-.pnp.js
-bun.lockb
-
-# Environment variables - NEVER commit these
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-.env.staging
-# Timestamped copies the operator console takes before it writes .env. Each one
-# holds every credential the deployment has, so they must never be committable —
-# a bare `.env` rule does not match `.env.bak.2026-01-01T00-00-00-000Z`.
-.env.bak.*
-
-# Internal working notes. docs/internal/api-consolidation.md already states in
-# its own header that this directory is not committed — but no rule existed, so
-# the whole directory was one `git add .` away from a public repo.
-docs/internal/
-
-# Secrets and credentials
-keys/
-*.pem
-*.key
-*.cert
-*.p12
-
-# Messaging channel local state (e.g. .channel-state/baileys/ session auth) —
-# grants live account access, treat like a credential. See CHANNEL_STATE_DIR
-# in .env.template.
-.channel-state/
-credentials*
-service-account*.json
-.railway-token
-
-# Setup state (generated during /setup)
-.setup-state.json
-
-# Temporary files
-temp/
-tmp/
-*.tmp
-*.zip
-
-# Build outputs
-dist/
-build/
-.next/
-out/
-
-# IDE files
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-.DS_Store
-Thumbs.db
-
-# Debug and logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-*.log
-bot/logs/
-
-# Testing
-coverage/
-.nyc_output/
-
-# Script output files
-bot/scripts/output/
-
-# OS generated
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-
-# Claude Code local files
-.claude/ralph-loop.local.md
-claude-progress.txt
-
-# Redis dump
-dump.rdb
-
-# Docker
-.docker/
-
-# Supabase local
-.supabase/
-supabase/.temp/
-**/supabase/.temp/
-dashboard/supabase/.temp/
-.env.provisioner
-
-# Python bytecode (the brief/ and curriculum/ packages)
-__pycache__/
-*.pyc
 
 # Pinokio launcher state. Generated per-install, never committed:
 # ENVIRONMENT holds this machine's launcher settings, and logs/ and cache/ are
@@ -110,13 +11,18 @@ ENVIRONMENT
 /logs/
 /cache/
 
-# Marker file: create it to stop start.js launching a local Redis, when you
-# would rather point REDIS_URL at a hosted one.
-.use-cloud-redis
+# Agent guides Pinokio writes into every app folder.
+/.clinerules
+/.cursorrules
+/.windsurfrules
+/.geminiignore
+/GEMINI.md
+/QWEN.md
+/AGENTS.md
 
-# The launcher's own source. Rumi's `credentials*` rule above exists to keep
-# credential FILES out of the repo; these two are code that happens to share the
-# prefix, and without these negations a fresh clone is missing the step that
-# collects your API keys.
-!onboarding/routes/credentials.js
-!onboarding/public/steps/credentials.js
+# Local Redis keeps its data next to the launcher (scripts/local-redis.js runs
+# redis-server from here). Runtime state, never committed.
+dump.rdb
+
+# The ports scripts/pick-port.js keeps for the bot and the wizard. Per machine.
+.ports.json

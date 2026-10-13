@@ -1,2 +1,0 @@
-web: node bot/whatsapp-bot.js
-worker: node bot/workers/sqs-worker.js

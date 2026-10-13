@@ -176,7 +176,9 @@ async function saveField({ row, input, card, status, save }) {
 
 /** Save then check: a value that is well-formed but wrong is the common case. */
 async function testConnection({ row, card, status }) {
-  const probe = PROBE_FOR[row.key];
+  // Required keys use Rumi's own checks; optional ones the launcher's, which
+  // the server lists in /api/state.
+  const probe = PROBE_FOR[row.key] || (state && state.probeFor && state.probeFor[row.key]);
   if (!probe) {
     card.setAttribute('data-state', 'ok');
     status.set(verdict('ok', 'Saved'));
